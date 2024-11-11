@@ -10,8 +10,14 @@ import SwiftUI
 @main
 struct Fetch_Mobile_Home_RecipeApp: App {
     var body: some Scene {
+        let apiConfig = APIConfig(baseURL: baseURL)
+        let recipeService = RecipeService(apiConfig: apiConfig)
+        let viewModel = RecipeViewModel(recipeService: recipeService)
         WindowGroup {
-            ContentView()
+            RecipeListView(viewModel: viewModel)
+                .task {
+                    await viewModel.loadRecipes()
+                }
         }
     }
 }
